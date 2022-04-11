@@ -1,9 +1,71 @@
-<!doctype html>
-<title>Загрузить новый файл</title>
-<h1>Загрузить новый файл</h1>
-<form method=post enctype=multipart/form-data>
-    <input type=file accept=".mp4" name=file>
-    <input type=submit value="Upload">
-</form>
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Team1</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="index_style.css">
+        <script type="text/javascript" src="index_script.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="header">
+            Team 1 neural network
+        </div>
+
+        <div id="info">
+            <p>На сайте представлена нейронная сеть,<br>определяющая наличие средств защиты<br>
+            на человеке.<br>Для того, чтобы ею воспользоваться,<br>загрузите на сайт видео, и в течении<br>
+            нескольких минут вы получите видеозапись<br>с результатом работы.</p>
+        </div>
+
+        <div id="created_by">
+            <p>
+                <h4>Над созданием работали:</h4>
+                <ul>
+                    <li>Федор Маширин</li>
+                    <li>Егор Кирносов</li>
+                    <li>Данила Кириллов</li>
+                    <li>Сегрей Муллин</li>
+                    <li>Александр Смирнов</li>
+                </ul>
+            </p>
+        </div>
+
+        <div class="input__wrapper"> <!--Кнопка с выбором файла-->
+            <input name="file" type="file" id="input__file" class="input input__file"> 
+            <label for="input__file" class="input__file-button">
+                <span class="input__file-icon-wrapper"><img class="input__file-icon" src="https://cdn.onlinewebfonts.com/svg/img_150954.png" alt="Выбрать файл" width="25"></span>
+                <span class="input__file-button-text">Выберите файл</span>
+            </label>
+        </div>
+
+        <div id="submit"> <!--Кнопка продолжить-->
+            <input id="submit_button" type="button" name="continue_button">
+            <label for="submit_button">Продолжить</label>
+        </div>
+
+        <!--Скрипт хз че делает, но работает с кнопкой загрузки-->
+        <script> 
+            let inputs = document.querySelectorAll('.input__file');
+            Array.prototype.forEach.call(inputs, function (input) {
+              let label = input.nextElementSibling,
+                labelVal = label.querySelector('.input__file-button-text').innerText;
+          
+              input.addEventListener('change', function (e) {
+                let countFiles = '';
+                if (this.files && this.files.length >= 1)
+                  countFiles = this.files.length;
+          
+                if (countFiles)
+                  label.querySelector('.input__file-button-text').innerText = 'Выбрано файлов: ' + countFiles;
+                else
+                  label.querySelector('.input__file-button-text').innerText = labelVal;
+              });
+            });
+        </script>
+
+    </body>
 
 </html>
