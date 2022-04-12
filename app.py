@@ -2,6 +2,7 @@ import os
 from flask import Flask, flash, request, redirect, url_for, render_template         
 # объясняется ниже
 from werkzeug.utils import secure_filename
+from yaml import load
 
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads/'
@@ -16,21 +17,32 @@ def upload_file():
     if request.method == 'POST':
         # проверим, передается ли в запросе файл 
         if 'file' not in request.files:
-            # После перенаправления на страницу загрузки
-            # покажем сообщение пользователю 
-            flash('Не могу прочитать файл')
             return redirect(request.url)
         file = request.files['file']
+        print(file)
         # Если файл не выбран, то браузер может
         # отправить пустой файл без имени.
         if file.filename == '':
-            flash('Нет выбранного файла')
             return redirect(request.url)
+        
         filename = secure_filename(file.filename)
         print(filename)
         file.save(f"{app.config['UPLOAD_FOLDER']}/{filename}")
-        return redirect(url_for('upload_file', name=filename))
+        
+        return redirect('/load')
     return render_template('index.html')
 
+
+
+@app.route('/load', methods=['GET', 'POST'])
+def loading():
+    return render_template('loading.html')
+
+
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+    return render_template('videoplayer.html')
+
+    
 if __name__ == "__main__":
     app.run()
