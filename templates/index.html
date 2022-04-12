@@ -33,18 +33,19 @@
             </p>
         </div>
 
-        <div class="input__wrapper"> <!--Кнопка с выбором файла-->
-            <input name="file" type="file" id="input__file" class="input input__file"> 
-            <label for="input__file" class="input__file-button">
-                <span class="input__file-icon-wrapper"><img class="input__file-icon" src="https://cdn.onlinewebfonts.com/svg/img_150954.png" alt="Выбрать файл" width="25"></span>
-                <span class="input__file-button-text">Выберите файл</span>
-            </label>
-        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="input__wrapper"> <!--Кнопка с выбором файла-->
+                <input type="file" accept=".mp4" name="file" id="input__file" class="input input__file"> 
+                <label for="input__file" class="input__file-button">
+                    <span class="input__file-icon-wrapper"><img class="input__file-icon" src="https://cdn.onlinewebfonts.com/svg/img_150954.png" alt="Выбрать файл" width="25"></span>
+                    <span class="input__file-button-text">Выберите файл</span>
+                </label>
+            </div>
 
-        <div id="submit"> <!--Кнопка продолжить-->
-            <input id="submit_button" type="button" name="continue_button">
-            <label for="submit_button">Продолжить</label>
-        </div>
+            <div id="submit"> <!--Кнопка продолжить-->
+                <button type="submit" class="input__file-button-text" id="submit_button">Продолжить</button>
+            </div>
+        </form>
 
         <!--Скрипт хз че делает, но работает с кнопкой загрузки-->
         <script> 
