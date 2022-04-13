@@ -2,7 +2,7 @@
 *.avi
 *.pt
 
-Yolov5_DeepSort_Pytorch/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
