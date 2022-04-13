@@ -1,3 +1,4 @@
+from importlib.resources import path
 import os
 from flask import Flask, flash, request, redirect, url_for, render_template, after_this_request         
 # объясняется ниже
