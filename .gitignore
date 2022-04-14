@@ -2,7 +2,7 @@
 *.avi
 *.pt
 
-
+Yolov5_DeepSort_Pytorch/deep_sort/deep/checkpoint/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
