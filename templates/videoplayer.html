@@ -4,7 +4,7 @@
     <head>
         <title>Team1</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="static\css\videoplayer.css">
+        <link rel="stylesheet" href="\static\css\videoplayer.css">
     </head>
 
     <body>
@@ -33,17 +33,17 @@
         </div>
         
         <div id="video">
-            <video class="player-video" controls>
-                <source src=static/{{ filename }} type="video/mp4">
+            <video class="player-video" controls="controls">
+                <source src="/static/short_vid_Trim.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
                 Your browser does not support the video tag.
             </video>
         </div>
-        <div>
-            {{filename}}
-        </div>
+        
         <div id="download"> <!--Кнопка скачивания-->
             <input id="download_button" type="button" name="download_button">
-            <label for="download_button">Скачать</label>
+            <label for="download_button">
+                <a href="/static/short_vid_Trim.mp4">Скачайте видео</a>
+            </label>
         </div>
 
     </body>
