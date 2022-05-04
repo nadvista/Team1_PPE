@@ -2,10 +2,15 @@ import os
 import shutil
 from flask import Flask, request, redirect, url_for, render_template, Response
 from werkzeug.utils import secure_filename
+from Yolov5_DeepSort_Pytorch.track import start
 import Yolov5_DeepSort_Pytorch.track
-from threading import Thread 
+from threading import Thread
 import threading
-import gi
+# import sys
+# _PATH = 'C:\msys64\mingw64\bin'
+# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + _PATH)
+
+# import gi
 
 
 app = Flask(__name__)
@@ -71,7 +76,8 @@ def loading(file):
 
 @app.route('/download/<file>', methods=['GET', 'POST'])
 def download(file):
-
+    filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
+    start(filepath)
     ###########################################################################
     # Переносим размеченный файл 
     try:
