@@ -50,7 +50,7 @@ def detect(source, model):
     fourcc = 'mp4v'
     device = ''
     show_vid = False
-    save_vid = False
+    save_vid = True
     save_txt = False
     classes = None
     agnostic_nms = False
@@ -294,6 +294,7 @@ def detect(source, model):
 def start(source=None, model=None):
     with torch.no_grad():
         detect(source, model)
+    return True
 
 
 if __name__ == '__main__':

@@ -31,16 +31,23 @@
                 </ul>
             </p>
         </div>
-        
+        <!-- Это то, как встроенно у нас. Ничего такого сверхестесвенного
+        <h1>Stream</h1>
+            <video autoplay src="http://localhost:8080">
+            Mario
+        </video> -->
         <div id="video">
-            <video class="player-video" controls>
-                <source src="short_vid_Trim.mp4" type="video/mp4" codecs="avc1.42E01E, mp4a.40.2">
+            <video class="player-video" controls="controls">
+                <source src="/static/short_vid_Trim.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                Your browser does not support the video tag.
             </video>
         </div>
-
+        
         <div id="download"> <!--Кнопка скачивания-->
             <input id="download_button" type="button" name="download_button">
-            <label for="download_button">Скачать</label>
+            <label for="download_button">
+                <a href="/static/short_vid_Trim.mp4">Скачайте видео</a>
+            </label>
         </div>
 
     </body>

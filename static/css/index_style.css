@@ -117,6 +117,17 @@ body{
     text-decoration: underline black;
 }
 
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin: 250px 900px;
+}
+
 /*кнопка продолжить*/
 #submit{
     display: flex;
