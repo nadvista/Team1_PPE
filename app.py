@@ -6,6 +6,7 @@ from Yolov5_DeepSort_Pytorch.track import start
 import Yolov5_DeepSort_Pytorch.track
 from threading import Thread
 import threading
+import database
 # import sys
 # _PATH = 'C:\msys64\mingw64\bin'
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + _PATH)
@@ -19,6 +20,8 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+conn_data = ()
+db = database.Database((conn_data))
 
 
 @app.route('/', methods=['POST'])
@@ -27,11 +30,14 @@ def upload_file_POST():
     ###########################################################################
     # Удаляет все папки чтобы запущенный ран сохранился 
     # в Yolov5_DeepSort_Pytorch\runs\track\weights\best_osnet_ibn_x1_0_MSMT17
-    delete_folder = 'Yolov5_DeepSort_Pytorch/runs/track/weights/'
-    delete_folders = os.listdir(delete_folder)
-    for g in delete_folders:
-        print("Delete: ", g)
-        shutil.rmtree(delete_folder + g)
+    try:
+        delete_folder = 'Yolov5_DeepSort_Pytorch/runs/track/weights/'
+        delete_folders = os.listdir(delete_folder)
+        for g in delete_folders:
+            print("Delete: ", g)
+            shutil.rmtree(delete_folder + g)
+    except:
+        pass
     ###########################################################################
     # Сохраняет файл
     if 'file' not in request.files:
@@ -77,7 +83,8 @@ def loading(file):
 @app.route('/download/<file>', methods=['GET', 'POST'])
 def download(file):
     filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
-    start(filepath)
+    data = start(filepath)
+    db.push(data, 'small', 'xdxdxdxdxdxd')
     ###########################################################################
     # Переносим размеченный файл 
     try:

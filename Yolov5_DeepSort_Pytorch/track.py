@@ -1,6 +1,7 @@
 # limit the number of cpus used by high performance libraries
 import os
 import sys
+from typing import List
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -38,7 +39,7 @@ if str(ROOT) not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 
-def detect(source, model):
+def detect(source, model, data: List):
 
     yolo_model = 'weights/best.pt' if model == None else model
     deep_sort_model = 'osnet_ibn_x1_0_MSMT17'
@@ -196,16 +197,21 @@ def detect(source, model):
             annotator = Annotator(im0, line_width=2, pil=not ascii)
 
             if det is not None and len(det):
+                to_app = [round(frame_idx/dataset.frames, 2), {}]
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(
                     im.shape[2:], det[:, :4], im0.shape).round()
 
                 # Print results
                 for c in det[:, -1].unique():
+                    
                     n = (det[:, -1] == c).sum()  # detections per class
                     # add to string
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "
-
+                    objs_num = int(n)
+                    to_app[1][names[int(c)]] = objs_num
+                
+                data.append(to_app)
                 xywhs = xyxy2xywh(det[:, 0:4])
                 confs = det[:, 4]
                 clss = det[:, 5]
@@ -247,8 +253,10 @@ def detect(source, model):
                                 save_one_box(bboxes, imc, file=save_dir / 'crops' /
                                              txt_file_name / names[c] / f'{id}' / f'{p.stem}.jpg', BGR=True)
 
+
                 LOGGER.info(
                     f'{s}Done. YOLO:({t3 - t2:.3f}s), DeepSort:({t5 - t4:.3f}s)')
+                print(to_app)
 
             else:
                 deepsort_list[i].increment_ages()
@@ -289,12 +297,13 @@ def detect(source, model):
     if update:
         # update model (to fix SourceChangeWarning)
         strip_optimizer(yolo_model)
+    return data
 
 
 def start(source=None, model=None):
     with torch.no_grad():
-        detect(source, model)
-    return True
+        data = detect(source, model, [])
+    return data
 
 
 if __name__ == '__main__':
