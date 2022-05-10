@@ -1,0 +1,74 @@
+body{
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(https://forums-images.oneplus.net/attachments/15/15313-4aa879d943353082fc07627377f4c5da.jpg);
+}
+
+#header {
+    font-size: 50px;
+    color: #ffffff;
+    background-color: rgba(255, 228, 228, 0.15);
+    border: 4px solid rgb(255, 255, 255, 0.6);
+    border-radius: 30px;
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 3px 3px 15px black, inset 3px 3px 20px rgb(48, 48, 48);
+    font-weight: 500;
+    font-family:'Courier New', Courier, monospace;
+}
+
+#info {
+    font-size: 23px;
+    color:#ffffff;
+    background-color: rgba(255, 228, 228, 0.15);
+    border: 4px solid rgb(255, 255, 255, 0.6);
+    border-radius: 30px;
+    margin-left: 20px;
+    padding-left: 12px;
+    padding-right: 6px;
+    width: 30%;
+    float: left;
+    box-shadow: 3px 3px 15px black, inset 3px 3px 20px rgb(48, 48, 48);
+    font-family: Comic Sans MS, Comic Sans, cursive;
+}
+
+#created_by {
+    font-size: 23px;
+    color:#ffffff;
+    background-color: rgba(255, 228, 228, 0.15);
+    border: 4px solid rgb(255, 255, 255, 0.6);
+    border-radius: 30px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding-left: 12px;
+    width: 30%;
+    float: left;
+    clear: left;
+    box-shadow: 3px 3px 15px black, inset 3px 3px 20px rgb(48, 48, 48);
+    font-family: Comic Sans MS, Comic Sans, cursive;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin: 250px 900px;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
