@@ -7,9 +7,13 @@ from werkzeug.utils import secure_filename
 import Yolov5_DeepSort_Pytorch.track
 from turbo_flask import Turbo
 from threading import Thread
+import gi
+gi.require_version("Gst", "1.0")
+from gi.repository import Gst, GLib
 
 app = Flask(__name__)
 turbo = Turbo(app)
+
 
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads/'
@@ -17,7 +21,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/', methods=['POST'])
 def upload_file_POST():
-    loading_flag = False
+    print(gi.__version__)
     # Сохраняет файл
     if 'file' not in request.files:
         return redirect(request.url)
@@ -68,7 +72,14 @@ def download():
     except:
         print("Failed Delete")
     ###########################################################################
-    # # Gstreamer here :))))))))    
+    # # Gstreamer here :))))))))
+    Gst.init()
+    # pipe_out = 'appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=8080'
+    pipe_out = 'filesrc location=static/tempfile.mp4 ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000'
+    
+    # pipeline = Gst.parse_launch("filesrc location=./static/tempfile.mp4 ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! filesink location=./output.mp4")
+    pipeline = Gst.parse_launch(pipe_out)
+    pipeline.set_state(Gst.State.PLAYING)
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')
 
