@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "page.html" %}
 
-    <head>
-        <title>Team1</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="\static\css\index_style.css">
-        <!-- <script type="text/javascript" src="index_script.js"></script> -->
-    </head>
-
-    <body>
-        
+{% block content %}
         <div id="header">
             Team 1 Personal Protection Equipment (PPE)
         </div>
@@ -69,7 +60,4 @@
               });
             });
         </script>
-
-    </body>
-
-</html>
+{% endblock %}
