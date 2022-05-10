@@ -1,38 +1,23 @@
+from concurrent.futures import thread
 import os
 import shutil
-from flask import Flask, request, redirect, url_for, render_template, Response
+from flask import Flask, flash, request, redirect, url_for, render_template, Response
+from matplotlib.pyplot import get
 from werkzeug.utils import secure_filename
-from Yolov5_DeepSort_Pytorch.track import start
 import Yolov5_DeepSort_Pytorch.track
+from turbo_flask import Turbo
 from threading import Thread
-import threading
-# import sys
-# _PATH = 'C:\msys64\mingw64\bin'
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + _PATH)
-
-# import gi
-
 
 app = Flask(__name__)
+turbo = Turbo(app)
 
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-
 @app.route('/', methods=['POST'])
 def upload_file_POST():
     loading_flag = False
-    ###########################################################################
-    # Удаляет все папки чтобы запущенный ран сохранился 
-    # в Yolov5_DeepSort_Pytorch\runs\track\weights\best_osnet_ibn_x1_0_MSMT17
-    delete_folder = 'Yolov5_DeepSort_Pytorch/runs/track/weights/'
-    delete_folders = os.listdir(delete_folder)
-    for g in delete_folders:
-        print("Delete: ", g)
-        shutil.rmtree(delete_folder + g)
-    ###########################################################################
     # Сохраняет файл
     if 'file' not in request.files:
         return redirect(request.url)
@@ -40,44 +25,27 @@ def upload_file_POST():
     if file.filename == '':
         return redirect(request.url)
     filename = secure_filename(file.filename)
-    filepath = f"{app.config['UPLOAD_FOLDER']}/{filename}"
+    filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     file.save(filepath)
     ###########################################################################
-    return redirect(url_for('loading', file = filename))
-
+    return redirect(url_for('loading',file=filename))
 
 @app.route('/', methods=['GET'])
 def upload_file_GET():
     return render_template('index.html')
 
-"""
-####################
-# YIELDS
-def step_loads(file):
-    yield render_template('loading.html')
-    filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
-    th = Thread(target=Yolov5_DeepSort_Pytorch.track.start, args=(filepath, )) # Запускаем разметку видео
-    th.start()
-    th.join()
-    yield redirect(url_for('download', file = file))
-    
-return Response(step_loads(file)) # Добавить в loading
-"""
-@app.route('/load/<file>', methods=['GET', 'POST'])
-def loading(file):
-    # @after_this_request
-    # def after_request(responce):
-    #     # Запускает Треккинг видео
-    #     # Переносим файл в static
-    #     return responce
-    return redirect(url_for('download', file = file))
-    # return render_template('loading.html')
+@app.route('/load/', methods=['GET', 'POST'])
+def loading():
+    filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
+    with app.app_context():
+        turbo.push(turbo.replace(render_template('loading.html'), 'content'))
+    Yolov5_DeepSort_Pytorch.track.start(filepath)
+    return redirect(url_for('download'))
 
 
-@app.route('/download/<file>', methods=['GET', 'POST'])
-def download(file):
-    filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
-    start(filepath)
+@app.route('/download/', methods=['GET', 'POST'])
+def download():
+    filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     ###########################################################################
     # Переносим размеченный файл 
     try:
@@ -101,29 +69,8 @@ def download(file):
         print("Failed Delete")
     ###########################################################################
     # # Gstreamer here :))))))))    
-    # # Это, если вы используете deepsort в файле object_tracker.py
-    # # Советую изучить как строить пайплайны в gstreamer и впринципе все эти теги для пайплайна
-    # # pipe_out как раз является пайплайном
-    # pipe_out = 'appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=8080'
-
-
-    # try:
-    #     vid = cv2.VideoCapture("filesrc location=./data/video/hype.mp4 ! decodebin ! videoconvert ! appsink", cv2.CAP_GSTREAMER)
-    # except Exception as e:
-    #     print(e)
-
-    # out = cv2.VideoWriter(pipe_out, 0, 30, (int(vid.get(cv2.CAP_PROP_FRAME_WIDTH)), int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))), True)
-
-    # # Всё запускается из файла server.py:
-    # # Но только фронт у нас в отдельном докер контейнере лежит
-    # from absl import app
-    # import object_tracker as object_tracker
-
-    # object_tracker.set_flags()
-
-    # app.run(object_tracker.main)
     ###########################################################################
-    return render_template('videoplayer.html', filename=file)
+    return render_template('videoplayer.html', filename='static/tempfile.mp4')
 
 
 if __name__ == "__main__":
