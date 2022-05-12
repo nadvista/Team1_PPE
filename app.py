@@ -1,8 +1,6 @@
-from concurrent.futures import thread
 import os
 import shutil
-from flask import Flask, flash, request, redirect, url_for, render_template, Response
-from matplotlib.pyplot import get
+from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 import Yolov5_DeepSort_Pytorch.track
 from turbo_flask import Turbo
@@ -22,6 +20,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/', methods=['POST'])
 def upload_file_POST():
     print(gi.__version__)
+    ###########################################################################
+    # Очищаем папку с размеченными видео
+    if os.path.isfile('/output/tempfile.mp4'): 
+        os.remove('/output/tempfile.mp4') 
+        print("success") 
+    else: 
+        print("File doesn't exists!")
+    ###########################################################################
     # Сохраняет файл
     if 'file' not in request.files:
         return redirect(request.url)
@@ -43,6 +49,7 @@ def loading():
     filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     with app.app_context():
         turbo.push(turbo.replace(render_template('loading.html'), 'content'))
+    print(filepath, " Now working################################################################")
     Yolov5_DeepSort_Pytorch.track.start(filepath)
     return redirect(url_for('download'))
 
@@ -54,7 +61,7 @@ def download():
     # Переносим размеченный файл 
     try:
         file_source = 'Yolov5_DeepSort_Pytorch/runs/track/weights/best_osnet_ibn_x1_0_MSMT17/'
-        file_destination = 'static'
+        file_destination = 'output'
         get_files = os.listdir(file_source)    
         for g in get_files:
             shutil.move(file_source + g, file_destination)
@@ -74,12 +81,19 @@ def download():
     ###########################################################################
     # # Gstreamer here :))))))))
     Gst.init()
-    # pipe_out = 'appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=8080'
-    pipe_out = 'filesrc location=static/tempfile.mp4 ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000'
-    
-    # pipeline = Gst.parse_launch("filesrc location=./static/tempfile.mp4 ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! filesink location=./output.mp4")
-    pipeline = Gst.parse_launch(pipe_out)
+
+    main_loop = GLib.MainLoop()
+    thread = Thread(target=main_loop.run)
+    thread.start()
+    pipeline = Gst.parse_launch("filesrc location=./output/tempfile.mp4 ! decodebin ! autovideoconvert ! tcpserversink host=127.0.0.1 port=5000")
     pipeline.set_state(Gst.State.PLAYING)
+    pipeline.set_state(Gst.State.NULL)
+    main_loop.quit()
+    # pipe_out = 'appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=8080'
+    # pipe_out = 'filesrc location=static/tempfile.mp4 ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000'
+    # pipeline = Gst.parse_launch("filesrc location=./static/tempfile.mp4 ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! filesink location=./output.mp4")
+    # pipeline = Gst.parse_launch(pipe_out)
+    # pipeline.set_state(Gst.State.PLAYING)
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')
 
