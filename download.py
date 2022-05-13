@@ -2,10 +2,10 @@ from flask import Blueprint,current_app, render_template
 import shutil
 import os
 
-download = Blueprint('download', __name__,
+download_bp = Blueprint('download', __name__,
                         template_folder='templates')
 
-@download.route('/download/', methods=['GET', 'POST'])
+@download_bp.route('/download/', methods=['GET', 'POST'])
 def download():
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     ###########################################################################
