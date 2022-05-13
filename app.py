@@ -1,5 +1,6 @@
 import os
 import shutil
+from time import sleep
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 import Yolov5_DeepSort_Pytorch.track
@@ -87,6 +88,11 @@ def download():
     thread.start()
     pipeline = Gst.parse_launch("filesrc location=./output/tempfile.mp4 ! decodebin ! autovideoconvert ! tcpserversink host=127.0.0.1 port=5000")
     pipeline.set_state(Gst.State.PLAYING)
+    try:
+        while True:
+            sleep(0.1)
+    except KeyboardInterrupt:
+        pass
     pipeline.set_state(Gst.State.NULL)
     main_loop.quit()
     # pipe_out = 'appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=700 speed-preset=superfast ! decodebin ! autovideoconvert ! theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=8080'

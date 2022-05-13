@@ -13,7 +13,7 @@ Gst.init()
 main_loop = GLib.MainLoop()
 thread = Thread(target=main_loop.run)
 thread.start()
-pipeline = Gst.parse_launch("filesrc location=./output/tempfile.mp4 ! decodebin ! autovideoconvert ! autovideosink")
+pipeline = Gst.parse_launch("filesrc location=./uploads/tempfile.mp4 ! decodebin ! autovideoconvert ! autovideosink")
 pipeline.set_state(Gst.State.PLAYING)
 try:
     while True:
