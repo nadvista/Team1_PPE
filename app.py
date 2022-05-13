@@ -126,22 +126,13 @@ def download():
     ###########################################################################
     # Gstreamer here   
     # В данном куске кода лишь пример использования gstreamer'a 
-    # Gst.init()
+    Gst.init()
 
-    # main_loop = GLib.MainLoop()
-    # thread = Thread(target=main_loop.run)
-    # thread.start()
-    # pipeline = Gst.parse_launch("v4l2src ! decodebin ! videoconvert ! autovideosink")
-    # pipeline.set_state(Gst.State.PLAYING)
-
-    # try:
-    #     while True:
-    #         sleep(0.1)
-    # except KeyboardInterrupt:
-    #     pass
-
-    # pipeline.set_state(Gst.State.NULL)
-    # main_loop.quit()
+    main_loop = GLib.MainLoop()
+    thread = Thread(target=main_loop.run)
+    thread.start()
+    pipeline = Gst.parse_launch("filesrc location=./static/tempfile.mp4 ! decodebin ! videoconvert ! autovideosink")
+    pipeline.set_state(Gst.State.PLAYING)
 
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')
