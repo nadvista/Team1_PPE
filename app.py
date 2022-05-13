@@ -1,16 +1,16 @@
+from concurrent.futures import thread
 import os
 import shutil
-from flask import Flask, request, redirect, url_for, render_template, Response
+from flask import Flask, flash, request, redirect, url_for, render_template, Response
+from matplotlib.pyplot import get
 from werkzeug.utils import secure_filename
 from Yolov5_DeepSort_Pytorch.track import start
 import Yolov5_DeepSort_Pytorch.track
+from turbo_flask import Turbo
 from threading import Thread
 from time import sleep
 # import database
 
-# import sys
-# _PATH = 'C:\msys64\mingw64\bin'
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + _PATH)
 
 '''
 Для начала следует установить сам gstreamer в систему.
@@ -28,6 +28,7 @@ from gi.repository import Gst, GLib
 
 
 app = Flask(__name__)
+turbo = Turbo(app)
 
 # Папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads/'
@@ -35,6 +36,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # conn_data = ()
 # db = database.Database((conn_data))
+
+
+@app.route('/', methods=['GET'])
+def upload_file_GET():
+    return render_template('index.html')
 
 
 @app.route('/', methods=['POST'])
@@ -61,33 +67,26 @@ def upload_file_POST():
     if file.filename == '':
         return redirect(request.url)
     filename = secure_filename(file.filename)
-    filepath = f"{app.config['UPLOAD_FOLDER']}/{filename}"
+    filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     file.save(filepath)
 
     ###########################################################################
-    return redirect(url_for('loading', file = filename))
+    return redirect(url_for('loading'))
 
 
-@app.route('/', methods=['GET'])
-def upload_file_GET():
-    return render_template('index.html')
-
-
-@app.route('/load/<file>', methods=['GET', 'POST'])
-def loading(file):
-    # @after_this_request
-    # def after_request(responce):
-    #     # Запускает Треккинг видео
-    #     # Переносим файл в static
-    #     return responce
-    return redirect(url_for('download', file = file))
-    # return render_template('loading.html')
-
-
-@app.route('/download/<file>', methods=['GET', 'POST'])
-def download(file):
-    filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
+@app.route('/load/', methods=['GET', 'POST'])
+def loading():
+    filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
+    with app.app_context():
+        turbo.push(turbo.replace(render_template('loading.html'), 'content'))
     data = start(filepath)
+    return redirect(url_for('download'))
+
+
+@app.route('/download/', methods=['GET', 'POST'])
+def download():
+    filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
+    
     # db.push(data, 'small', 'xdxdxdxdxdxd')
 
     ###########################################################################
@@ -114,7 +113,7 @@ def download(file):
         print("[O-ops!] Output file already exists.")
 
     ###########################################################################
-    # И удаляем папку откуда взяли файл
+    # И удаляем папку откуда взяли размеченный файл
     try:
         delete_folder = 'Yolov5_DeepSort_Pytorch/runs/track/weights/'
         delete_files = os.listdir(delete_folder)
@@ -127,25 +126,25 @@ def download(file):
     ###########################################################################
     # Gstreamer here   
     # В данном куске кода лишь пример использования gstreamer'a 
-    Gst.init()
+    # Gst.init()
 
-    main_loop = GLib.MainLoop()
-    thread = Thread(target=main_loop.run)
-    thread.start()
-    pipeline = Gst.parse_launch("v4l2src ! decodebin ! videoconvert ! autovideosink")
-    pipeline.set_state(Gst.State.PLAYING)
+    # main_loop = GLib.MainLoop()
+    # thread = Thread(target=main_loop.run)
+    # thread.start()
+    # pipeline = Gst.parse_launch("v4l2src ! decodebin ! videoconvert ! autovideosink")
+    # pipeline.set_state(Gst.State.PLAYING)
 
-    try:
-        while True:
-            sleep(0.1)
-    except KeyboardInterrupt:
-        pass
+    # try:
+    #     while True:
+    #         sleep(0.1)
+    # except KeyboardInterrupt:
+    #     pass
 
-    pipeline.set_state(Gst.State.NULL)
-    main_loop.quit()
+    # pipeline.set_state(Gst.State.NULL)
+    # main_loop.quit()
 
     ###########################################################################
-    return render_template('videoplayer.html', filename=file)
+    return render_template('videoplayer.html', filename='static/tempfile.mp4')
 
 
 if __name__ == "__main__":

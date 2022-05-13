@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "page.html" %}
 
-    <head>
-        <title>Team1</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="\static\css\videoplayer.css">
-    </head>
-
-    <body>
-        
+{% block content %}
         <div id="header">
             Team 1 Personal Protection Equipment (PPE)
         </div>
@@ -38,18 +30,13 @@
         </video> -->
         <div id="video">
             <video class="player-video" controls="controls">
-                <source src="/static/short_vid_Trim.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                <source src="/static/tempfile.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
                 Your browser does not support the video tag.
             </video>
         </div>
-        
         <div id="download"> <!--Кнопка скачивания-->
             <input id="download_button" type="button" name="download_button">
             <label for="download_button">
                 <a href="/static/short_vid_Trim.mp4">Скачайте видео</a>
             </label>
-        </div>
-
-    </body>
-
-</html>
+{% endblock %}
