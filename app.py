@@ -1,9 +1,14 @@
+from json import load
 from flask import Flask
 import upload
 import loading
 import download
+from turbo_flask import Turbo
 
 app = Flask(__name__)
+turbo_app = Turbo(app)
+loading.turbo = turbo_app
+
 
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads/'

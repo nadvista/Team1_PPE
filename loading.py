@@ -1,12 +1,11 @@
 from flask import Blueprint, redirect, url_for,current_app
 import app_utils
 import Yolov5_DeepSort_Pytorch.track
-from turbo_flask import Turbo
 
+turbo = None
 loading_bp = Blueprint('loading', __name__,
                         template_folder='templates')
 
-turbo = Turbo(current_app)
 
 @loading_bp.route('/load/<file>', methods=['GET', 'POST'])
 def loading(file):
