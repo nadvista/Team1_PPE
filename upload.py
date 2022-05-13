@@ -17,7 +17,7 @@ def upload_file_POST():
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/{filename}"
     file.save(filepath)
     ###########################################################################
-    return redirect(url_for('loading',file=filename))
+    return redirect(url_for('loading.loading',file=filename))
 
 @upload_bp.route('/', methods=['GET'])
 def upload_file_GET():

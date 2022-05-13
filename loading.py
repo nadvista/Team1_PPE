@@ -12,4 +12,4 @@ def loading(file):
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/{file}"
     app_utils.turbo_change_page(current_app,turbo,'loading.html','content')
     Yolov5_DeepSort_Pytorch.track.start(filepath)
-    return redirect(url_for('download'))
+    return redirect(url_for('download.download'))
