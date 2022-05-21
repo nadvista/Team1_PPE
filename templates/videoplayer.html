@@ -29,14 +29,12 @@
             Mario
         </video> -->
         <div id="video">
-            <video class="player-video" controls="controls">
-                <source src="/static/tempfile.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-                Your browser does not support the video tag.
+            <video class="player-video" autoplay src="http://localhost:8080" controls="controls">
             </video>
         </div>
         <div id="download"> <!--Кнопка скачивания-->
             <input id="download_button" type="button" name="download_button">
             <label for="download_button">
-                <a href="/static/short_vid_Trim.mp4">Скачайте видео</a>
+                <a href="./static/tempfile.mp4">Скачайте видео</a>
             </label>
 {% endblock %}

@@ -8,23 +8,9 @@ from Yolov5_DeepSort_Pytorch.track import start
 import Yolov5_DeepSort_Pytorch.track
 from turbo_flask import Turbo
 from threading import Thread
-from time import sleep
+
 # import database
 
-
-'''
-Для начала следует установить сам gstreamer в систему.
-
-[Для Linux Ubuntu]
-Чтобы установить gstreamer в систему запустите в терминале:
-
->> sudo apt install libgstreamer1.0-0 gstreamer1.0-plugins-{base,good,bad,ugly} gstreamer1.0-tools python3-gi gir1.2-gstreamer-1.0
->> sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0
-'''
-
-import gi
-gi.require_version("Gst", "1.0")
-from gi.repository import Gst, GLib
 
 
 app = Flask(__name__)
@@ -45,7 +31,6 @@ def upload_file_GET():
 
 @app.route('/', methods=['POST'])
 def upload_file_POST():
-    # loading_flag = False
 
     ###########################################################################
     # Удаляет все папки чтобы запущенный ран сохранился в 
@@ -66,7 +51,6 @@ def upload_file_POST():
     file = request.files['file']
     if file.filename == '':
         return redirect(request.url)
-    filename = secure_filename(file.filename)
     filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     file.save(filepath)
 
@@ -92,11 +76,10 @@ def download():
     ###########################################################################
     # Данный кусок кода удаляет загруженный исходный файл из /uploads
     try:
-        delete_folder = './uploads/'
-        delete_files = os.listdir(delete_folder)
+        delete_files = os.listdir('./' + UPLOAD_FOLDER)
         for n in delete_files:
-            os.remove(delete_folder + n)
-            print(f'[INFO] Source file "{n}" from "{delete_folder}" was deleted.')
+            os.remove('./' + UPLOAD_FOLDER + n)
+            print(f'[INFO] Source file "{n}" from "{UPLOAD_FOLDER}" was deleted.')
     except:
         print("[O-ops!] Failed to delete source file.")
 
@@ -124,15 +107,35 @@ def download():
         print("[O-ops!] Failed delete.")
 
     ###########################################################################
-    # Gstreamer here   
-    # В данном куске кода лишь пример использования gstreamer'a 
-    Gst.init()
+    # FFmpeg here  
 
-    main_loop = GLib.MainLoop()
-    thread = Thread(target=main_loop.run)
-    thread.start()
-    pipeline = Gst.parse_launch("filesrc location=./static/tempfile.mp4 ! decodebin ! videoconvert ! autovideosink")
-    pipeline.set_state(Gst.State.PLAYING)
+    TEMP_FOLDER = './metadata'
+    PATH_TO_INPUT_FILE = './static'
+
+    command = (
+    f'ffmpeg -hide_banner -y -i {PATH_TO_INPUT_FILE}/tempfile.mp4 \
+       -r 25 -c:v libx264 -pix_fmt yuv420p -preset veryfast -profile:v main \
+       -keyint_min 250 -g 250 -sc_threshold 0 \
+       -c:a aac -b:a 128k -ac 2 -ar 48000 \
+       -map v:0 -filter:v:0 "scale=-2:360"  -b:v:0 800k  -maxrate:0 856k  -bufsize:0 1200k \
+       -map v:0 -filter:v:1 "scale=-2:432"  -b:v:1 1400k -maxrate:1 1498k -bufsize:1 2100k \
+       -map v:0 -filter:v:2 "scale=-2:540"  -b:v:2 2000k -maxrate:2 2140k -bufsize:2 3500k \
+       -map v:0 -filter:v:3 "scale=-2:720"  -b:v:3 2800k -maxrate:3 2996k -bufsize:3 4200k \
+       -map v:0 -filter:v:4 "scale=-2:1080" -b:v:4 5000k -maxrate:4 5350k -bufsize:4 7500k \
+       -map 0:a? \
+       -init_seg_name "{TEMP_FOLDER}/init-\$RepresentationID\$.\$ext\$" \
+       -media_seg_name "{TEMP_FOLDER}/chunk-\$RepresentationID\$-\$Number%05d\$.\$ext\$" \
+       -dash_segment_type mp4 \
+       -use_template 1 \
+       -use_timeline 0 \
+       -seg_duration 10 \
+       -adaptation_sets "id=0,streams=v id=1,streams=a" \
+       -f dash \
+       dash.mpd'
+    )
+
+    os.system(command)
+
 
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')
