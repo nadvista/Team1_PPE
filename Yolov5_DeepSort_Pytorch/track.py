@@ -197,7 +197,6 @@ def detect(source, model, data: List):
             annotator = Annotator(im0, line_width=2, pil=not ascii)
 
             if det is not None and len(det):
-                to_app = [round(frame_idx/dataset.frames, 2), {}]
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(
                     im.shape[2:], det[:, :4], im0.shape).round()
@@ -208,10 +207,7 @@ def detect(source, model, data: List):
                     n = (det[:, -1] == c).sum()  # detections per class
                     # add to string
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "
-                    objs_num = int(n)
-                    to_app[1][names[int(c)]] = objs_num
                 
-                data.append(to_app)
                 xywhs = xyxy2xywh(det[:, 0:4])
                 confs = det[:, 4]
                 clss = det[:, 5]
@@ -222,6 +218,10 @@ def detect(source, model, data: List):
                     xywhs.cpu(), confs.cpu(), clss.cpu(), im0)
                 t5 = time_sync()
                 dt[3] += t5 - t4
+
+                for output in outputs:
+                    if len(outputs[i]) > 0:
+                        data.append((round(frame_idx/dataset.frames, 4), outputs[i][0][4], outputs[i][0][5]))
 
                 # draw boxes for visualization
                 if len(outputs[i]) > 0:
@@ -256,7 +256,6 @@ def detect(source, model, data: List):
 
                 LOGGER.info(
                     f'{s}Done. YOLO:({t3 - t2:.3f}s), DeepSort:({t5 - t4:.3f}s)')
-                print(to_app)
 
             else:
                 deepsort_list[i].increment_ages()

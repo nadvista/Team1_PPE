@@ -7,6 +7,7 @@ import Yolov5_DeepSort_Pytorch.track
 from threading import Thread
 import threading
 import database
+import time
 # import sys
 # _PATH = 'C:\msys64\mingw64\bin'
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + _PATH)
@@ -20,8 +21,8 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-conn_data = ()
-db = database.Database((conn_data))
+conn_data = (5432, 'localhost', 'ppe_db', 'SyW8ZzaNJiKMx2y', 'postgres')
+db = database.Database(conn_data)
 
 
 @app.route('/', methods=['POST'])
@@ -54,6 +55,7 @@ def upload_file_POST():
 
 @app.route('/', methods=['GET'])
 def upload_file_GET():
+    print('upl')
     return render_template('index.html')
 
 """
@@ -76,6 +78,7 @@ def loading(file):
     #     # Запускает Треккинг видео
     #     # Переносим файл в static
     #     return responce
+    print('load')
     return redirect(url_for('download', file = file))
     # return render_template('loading.html')
 
@@ -84,7 +87,10 @@ def loading(file):
 def download(file):
     filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
     data = start(filepath)
-    db.push(data, 'small', 'xdxdxdxdxdxd')
+    data = db._process_data(data)
+    print(data)
+    print(round(time.time()))
+    db.push(data, str(round(time.time())))
     ###########################################################################
     # Переносим размеченный файл 
     try:
