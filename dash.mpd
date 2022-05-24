@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:mpeg:dash:schema:mpd:2011"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd"
+	profiles="urn:mpeg:dash:profile:isoff-live:2011"
+	type="static"
+	mediaPresentationDuration="PT1.0S"
+	maxSegmentDuration="PT10.0S"
+	minBufferTime="PT2.0S">
+	<ProgramInformation>
+	</ProgramInformation>
+	<ServiceDescription id="0">
+	</ServiceDescription>
+	<Period id="0" start="PT0.0S">
+		<AdaptationSet id="0" contentType="video" startWithSAP="1" segmentAlignment="true" bitstreamSwitching="true" frameRate="30/1" maxWidth="570" maxHeight="1080" par="135:256" lang="und">
+			<Representation id="0" mimeType="video/mp4" codecs="avc1.4d4014" bandwidth="800000" width="190" height="360" sar="1215:1216">
+				<SegmentTemplate timescale="1000000" duration="10000000" initialization="./metadata/init" media="./metadata/chunk" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="1" mimeType="video/mp4" codecs="avc1.4d4015" bandwidth="1400000" width="228" height="432" sar="1215:1216">
+				<SegmentTemplate timescale="1000000" duration="10000000" initialization="./metadata/init" media="./metadata/chunk" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="2" mimeType="video/mp4" codecs="avc1.4d4015" bandwidth="2000000" width="284" height="540" sar="18225:18176">
+				<SegmentTemplate timescale="1000000" duration="10000000" initialization="./metadata/init" media="./metadata/chunk" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="3" mimeType="video/mp4" codecs="avc1.4d401e" bandwidth="2800000" width="380" height="720" sar="1215:1216">
+				<SegmentTemplate timescale="1000000" duration="10000000" initialization="./metadata/init" media="./metadata/chunk" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="4" mimeType="video/mp4" codecs="avc1.4d401f" bandwidth="5000000" width="570" height="1080" sar="1215:1216">
+				<SegmentTemplate timescale="1000000" duration="10000000" initialization="./metadata/init" media="./metadata/chunk" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+		</AdaptationSet>
+		<AdaptationSet id="1" contentType="audio" startWithSAP="1" segmentAlignment="true" bitstreamSwitching="true">
+		</AdaptationSet>
+	</Period>
+</MPD>

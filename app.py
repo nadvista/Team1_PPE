@@ -114,7 +114,7 @@ def download():
 
     command = (
     f'ffmpeg -hide_banner -y -i {PATH_TO_INPUT_FILE}/tempfile.mp4 \
-       -r 25 -c:v libx264 -pix_fmt yuv420p -preset veryfast -profile:v main \
+       -r 30 -c:v libx264 -pix_fmt yuv420p -preset veryfast -profile:v main \
        -keyint_min 250 -g 250 -sc_threshold 0 \
        -c:a aac -b:a 128k -ac 2 -ar 48000 \
        -map v:0 -filter:v:0 "scale=-2:360"  -b:v:0 800k  -maxrate:0 856k  -bufsize:0 1200k \
