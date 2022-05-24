@@ -8,8 +8,8 @@ from Yolov5_DeepSort_Pytorch.track import start
 import Yolov5_DeepSort_Pytorch.track
 from turbo_flask import Turbo
 from threading import Thread
-
-# import database
+import time
+import database
 
 
 
@@ -20,8 +20,9 @@ turbo = Turbo(app)
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# conn_data = ()
-# db = database.Database((conn_data))
+# conn_data = (5432, 'localhost', 'ppe_db', 'SyW8ZzaNJiKMx2y', 'postgres')
+# db = database.Database(conn_data)
+
 
 
 @app.route('/', methods=['GET'])
@@ -63,15 +64,20 @@ def loading():
     filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
     with app.app_context():
         turbo.push(turbo.replace(render_template('loading.html'), 'content'))
+
     data = start(filepath)
+    # data = db._process_data(data)
+    # print(data)
+    # print(round(time.time()))
+    # db.push(data, str(round(time.time())))
+    
     return redirect(url_for('download'))
 
 
 @app.route('/download/', methods=['GET', 'POST'])
 def download():
     filepath = f"{app.config['UPLOAD_FOLDER']}/tempfile.mp4"
-    
-    # db.push(data, 'small', 'xdxdxdxdxdxd')
+
 
     ###########################################################################
     # Данный кусок кода удаляет загруженный исходный файл из /uploads
@@ -114,7 +120,7 @@ def download():
 
     command = (
     f'ffmpeg -hide_banner -y -i {PATH_TO_INPUT_FILE}/tempfile.mp4 \
-       -r 25 -c:v libx264 -pix_fmt yuv420p -preset veryfast -profile:v main \
+       -r 30 -c:v libx264 -pix_fmt yuv420p -preset veryfast -profile:v main \
        -keyint_min 250 -g 250 -sc_threshold 0 \
        -c:a aac -b:a 128k -ac 2 -ar 48000 \
        -map v:0 -filter:v:0 "scale=-2:360"  -b:v:0 800k  -maxrate:0 856k  -bufsize:0 1200k \
@@ -135,7 +141,6 @@ def download():
     )
 
     os.system(command)
-
 
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')

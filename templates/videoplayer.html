@@ -18,20 +18,28 @@
                     <li>Федор Маширин</li>
                     <li>Егор Кирносов</li>
                     <li>Данила Кириллов</li>
-                    <li>Сегрей Муллин</li>
+                    <li>Сергей Муллин</li>
                     <li>Александр Смирнов</li>
                 </ul>
             </p>
         </div>
-        <!-- Это то, как встроенно у нас. Ничего такого сверхестесвенного
-        <h1>Stream</h1>
-            <video autoplay src="http://localhost:8080">
-            Mario
-        </video> -->
+
         <div id="video">
-            <video class="player-video" autoplay src="http://localhost:8080" controls="controls">
-            </video>
+            <video id="my-video" class="video-js" controls preload="auto" width="640" data-setup="{}">
+                <source src="/dash.mpd" type="application/dash+xml" />
+                <p class="vjs-no-js">NO SIGNAL</p>
+            </video>    
         </div>
+         
+        <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.4/dist/videojs-hls-quality-selector.min.js"></script>
+        <script>
+            const player = videojs('my-video');
+            player.hlsQualitySelector();
+        </script>
+
+        
         <div id="download"> <!--Кнопка скачивания-->
             <input id="download_button" type="button" name="download_button">
             <label for="download_button">
