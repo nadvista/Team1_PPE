@@ -24,13 +24,11 @@
             </p>
         </div>
 
-        <div id="video">
-            <video id="my-video" class="video-js" controls preload="auto" width="640" data-setup="{}">
-                <source src="/dash.mpd" type="application/dash+xml" />
-                <p class="vjs-no-js">NO SIGNAL</p>
-            </video>    
-        </div>
-         
+        <video id="my-video" class="video-js" controls preload="auto" width="640" data-setup="{}">
+            <source src="./video_streaming/output_manifest.mpd" type="application/dash+xml" />
+            <p class="vjs-no-js">NO SIGNAL</p>
+        </video>
+        
         <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.4/dist/videojs-hls-quality-selector.min.js"></script>

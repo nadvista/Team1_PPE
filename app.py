@@ -115,29 +115,18 @@ def download():
     ###########################################################################
     # FFmpeg here  
 
-    TEMP_FOLDER = './metadata'
+    DATA_FOLDER = './video_streaming'
     PATH_TO_INPUT_FILE = './static'
 
     command = (
-    f'ffmpeg -hide_banner -y -i {PATH_TO_INPUT_FILE}/tempfile.mp4 \
-       -r 30 -c:v libx264 -pix_fmt yuv420p -preset veryfast -profile:v main \
-       -keyint_min 250 -g 250 -sc_threshold 0 \
-       -c:a aac -b:a 128k -ac 2 -ar 48000 \
-       -map v:0 -filter:v:0 "scale=-2:360"  -b:v:0 800k  -maxrate:0 856k  -bufsize:0 1200k \
-       -map v:0 -filter:v:1 "scale=-2:432"  -b:v:1 1400k -maxrate:1 1498k -bufsize:1 2100k \
-       -map v:0 -filter:v:2 "scale=-2:540"  -b:v:2 2000k -maxrate:2 2140k -bufsize:2 3500k \
-       -map v:0 -filter:v:3 "scale=-2:720"  -b:v:3 2800k -maxrate:3 2996k -bufsize:3 4200k \
-       -map v:0 -filter:v:4 "scale=-2:1080" -b:v:4 5000k -maxrate:4 5350k -bufsize:4 7500k \
-       -map 0:a? \
-       -init_seg_name "{TEMP_FOLDER}/init-\$RepresentationID\$.\$ext\$" \
-       -media_seg_name "{TEMP_FOLDER}/chunk-\$RepresentationID\$-\$Number%05d\$.\$ext\$" \
-       -dash_segment_type mp4 \
-       -use_template 1 \
-       -use_timeline 0 \
-       -seg_duration 10 \
-       -adaptation_sets "id=0,streams=v id=1,streams=a" \
-       -f dash \
-       dash.mpd'
+    f'ffmpeg -re -i {PATH_TO_INPUT_FILE}/tempfile.mp4 -map 0 -map 0 -c:a \
+        aac -c:v libx264 -b:v:0 800k -b:v:1 \
+        300k -s:v:1 320x170 -profile:v:1 baseline \
+        -profile:v:0 main -bf 1 -keyint_min 120 -g 120 \
+        -sc_threshold 0 -b_strategy 0 -ar:a:1 22050 \
+        -use_timeline 1 -use_template 1 -window_size 5 \
+        -adaptation_sets "id=0,streams=v id=1,streams=a" \
+        -f dash {DATA_FOLDER}/output_manifest.mpd'
     )
 
     os.system(command)
