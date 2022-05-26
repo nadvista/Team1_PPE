@@ -13,20 +13,23 @@ loading_bp = Blueprint('loading', __name__,
                         template_folder='templates')
 
 
-conn_data = (5432, 'localhost', 'ppe_db', '1234', 'postgres')
-db = database.Database(conn_data)
 
 @loading_bp.route('/load/<file>', methods=['GET', 'POST'])
 def loading(file):
+    ###########################################################################
+    # Database
+    # conn_data ввести данные которые использовались при создании бд
+    conn_data = (5432, 'localhost', 'postgres', '123', 'postgres') 
+    db = database.Database(conn_data)
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/{file}"
     app_utils.turbo_change_page(current_app,turbo,'loading.html','content')
     data = Yolov5_DeepSort_Pytorch.track.start(filepath)
     data = db._process_data(data)
     db.push(data, str(round(time.time())))
+    db.close()
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/tempfile.mp4"
-
     ###########################################################################
-    # И удаляем файл
+    # Удаляем tempfile.mp4 
     try:
         delete_folder = 'static/'
         os.unlink(f"{delete_folder}tempfile.mp4")
@@ -55,4 +58,5 @@ def loading(file):
             shutil.rmtree(delete_folder + g)
     except:
         print("Failed Delete")
+    
     return redirect(url_for('download.download_page'))

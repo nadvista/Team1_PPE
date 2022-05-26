@@ -6,6 +6,8 @@ class Database:
     DB_SCHEMA = 'public'
     DB_TABLE = 'main'    
     DB_TXT_FILE = os.path.join(os.curdir + '/static/data.txt')
+
+
     def __init__(self, conn_data):
         port = str(conn_data[0])
         host = conn_data[1]
@@ -16,6 +18,7 @@ class Database:
                                      port = port, user = user, password = password)
         self.cursor = self.conn.cursor()
     
+
     def push(self, data: List, vid_id: str) -> None:
         '''Этот метод пушит данные в бд'''
         query = 'INSERT INTO ' + Database.DB_SCHEMA + '.' + Database.DB_TABLE
@@ -92,3 +95,8 @@ class Database:
         for i in range(len(disappears)):
             merged.append((processed[i][0], disappears[i][0], processed[i][1], processed[i][2]))
         return merged
+    
+
+    def close(self):
+        self.cursor.close()
+        self.conn.close()
