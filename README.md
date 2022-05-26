@@ -6,6 +6,7 @@
     
     3. pip install -r requirements.txt
     
-    4. Перенести веса вашей нейросети в папку weights. Наши веса доступны по ссылке https://disk.yandex.ru/d/PxlQc-y6dEltsw
+    4. Перенести веса вашей нейросети в папку weights. 
+        Наши веса доступны по ссылке https://disk.yandex.ru/d/PxlQc-y6dEltsw
     
     5. flask run
