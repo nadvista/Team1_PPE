@@ -4,8 +4,8 @@ from typing import List
 
 class Database:
     DB_SCHEMA = 'public'
-    DB_TABLE = 'main'
-    DB_TXT_FILE = os.path.join(os.curdir + 'static' + 'data.txt')
+    DB_TABLE = 'main'    
+    DB_TXT_FILE = os.path.join(os.curdir + '/static/data.txt')
     def __init__(self, conn_data):
         port = str(conn_data[0])
         host = conn_data[1]

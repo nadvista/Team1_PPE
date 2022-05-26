@@ -4,6 +4,8 @@ import app_utils
 import Yolov5_DeepSort_Pytorch.track
 import shutil
 import os
+import time
+import database
 from moviepy.editor import *
 
 turbo = None
@@ -11,12 +13,16 @@ loading_bp = Blueprint('loading', __name__,
                         template_folder='templates')
 
 
+conn_data = (5432, 'localhost', 'ppe_db', '1234', 'postgres')
+db = database.Database(conn_data)
+
 @loading_bp.route('/load/<file>', methods=['GET', 'POST'])
 def loading(file):
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/{file}"
     app_utils.turbo_change_page(current_app,turbo,'loading.html','content')
-    Yolov5_DeepSort_Pytorch.track.start(filepath)
-
+    data = Yolov5_DeepSort_Pytorch.track.start(filepath)
+    data = db._process_data(data)
+    db.push(data, str(round(time.time())))
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/tempfile.mp4"
 
     ###########################################################################
