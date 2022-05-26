@@ -219,10 +219,7 @@ def detect(source, model, data: List):
                 t5 = time_sync()
                 dt[3] += t5 - t4
 
-                #извлечение данных о видео
-                for output in outputs:
-                    if len(outputs[i]) > 0:
-                        data.append((round(frame_idx/dataset.frames, 4), outputs[i][0][4], outputs[i][0][5]))
+            
 
                 # draw boxes for visualization
                 if len(outputs[i]) > 0:
@@ -231,6 +228,7 @@ def detect(source, model, data: List):
                         bboxes = output[0:4]
                         id = output[4]
                         cls = output[5]
+                        data.append((round(frame_idx/dataset.frames, 4), output[4], output[5]))
 
                         if save_txt:
                             # to MOT format
