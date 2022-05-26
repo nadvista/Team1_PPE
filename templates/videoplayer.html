@@ -34,9 +34,10 @@
                 Your browser does not support the video tag.
             </video>
         </div>
-        <div id="download"> <!--Кнопка скачивания-->
-            <input id="download_button" type="button" name="download_button">
-            <label for="download_button">
-                <a href="/static/short_vid_Trim.mp4">Скачайте видео</a>
-            </label>
+        <form method="post" enctype = "multipart/form-data">
+            <div id="submit">
+                <!--Кнопка продолжить-->
+                <button type="submit" class="input__file-button-text" id="submit_button">Скачать видео</button>
+            </div>
+        </form>
 {% endblock %}
