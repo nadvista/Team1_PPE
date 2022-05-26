@@ -34,8 +34,10 @@
                 Your browser does not support the video tag.
             </video>
         </div>
-            <div id="submit">
-                <!--Кнопка продолжить-->
-                <a class="btn btn-success" href="{{url_for('download.download_file')}}">Download</a>
-            </div>
+        <div id="submit">
+            <a class="btn btn-success" href="{{url_for('download.download_video')}}">Скачать видео</a>
+        </div>
+        <div id="submit">
+            <a class="btn btn-success" href="{{url_for('download.download_db')}}">Скачать статистику</a>
+        </div>
 {% endblock %}
