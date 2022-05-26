@@ -34,10 +34,8 @@
                 Your browser does not support the video tag.
             </video>
         </div>
-        <form method="post" enctype = "multipart/form-data">
             <div id="submit">
                 <!--Кнопка продолжить-->
-                <button type="submit" class="input__file-button-text" id="submit_button">Скачать видео</button>
+                <a class="btn btn-success" href="{{url_for('download.download_file')}}">Download</a>
             </div>
-        </form>
 {% endblock %}

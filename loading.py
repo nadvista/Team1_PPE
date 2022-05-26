@@ -40,4 +40,4 @@ def loading(file):
     # # Gstreamer here :))))))))
     ###########################################################################
 
-    return redirect(url_for('download.downloadGET'))
+    return redirect(url_for('download.download_page'))
