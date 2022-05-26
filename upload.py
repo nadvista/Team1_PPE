@@ -6,14 +6,13 @@ upload_bp = Blueprint('upload', __name__,
 
 @upload_bp.route('/', methods=['POST'])
 def upload_file_POST():
-    loading_flag = False
     # Сохраняет файл
     if 'file' not in request.files:
         return redirect(request.url)
     file = request.files['file']
     if file.filename == '':
         return redirect(request.url)
-    # filename = secure_filename(file.filename)
+        
     filename = "tempfile.mp4"
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/{filename}"
     file.save(filepath)
