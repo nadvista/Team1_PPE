@@ -20,7 +20,7 @@ def download_video():
 @download_bp.route('/downloaddb/')
 def download_db():
     path = os.path.join(current_app.root_path,
-                        current_app.config['DOWNLOAD_FOLDER'], "ИМЯФАЙЛА!!!")
+                        current_app.config['DOWNLOAD_FOLDER'], "data.txt")
     return send_file(path, as_attachment=True)
 
 @download_bp.route('/download/')
