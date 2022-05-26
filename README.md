@@ -1,15 +1,14 @@
-Репозиторий с трекингом видео
+Инструкция по установке: 
 
-    git clone --recurse-submodules https://github.com/mikel-brostrom/Yolov5_DeepSort_Pytorch.git
-Установить все зависимости из репозитория
-
-    pip install -qr requirements.txt
-Разрезать видео на кадры
-
-    ffmpeg -ss 00:00:00 -i test.avi -t 00:00:02 -c copy out.avi
-Строка для трекинга 
-
-    python track.py --yolo_model /content/Yolov5_DeepSort_Pytorch/yolov5/weights/crowdhuman_yolov5m.pt --source out.avi --save-vid
+    1. git clone 
+    
+    2. python3 -m venv venv
+    
+    3. pip install -r requirements.txt
+    
+    4. Перенести веса вашей нейросети в папку weights
+    
+    5. flask run
 ***
 # ТЗ: #
 * Gstreamer - встроить в проект 
