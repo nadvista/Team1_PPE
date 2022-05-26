@@ -1,14 +1,34 @@
 {% extends "page.html" %}
 
 {% block content %}
-
+<!--
         <div id="video">
             <video class="player-video" controls="controls">
                 <source src="downloads/tempfile.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
                 Your browser does not support the video tag.
             </video>
         </div>
-        
+-->
+        <div id="video">
+            <video
+                id="video"
+                class="video-js"
+                controls
+                preload="auto"
+                width="640"
+                height="264"
+                data-setup="{}">
+                <source src="/static/tempfile.mp4" type="video/mp4" />
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a>
+                </p>
+            </video>            
+        </div> 
+        <script src="https://vjs.zencdn.net/7.19.2/video.min.js"></script>
+
         <div id="submit">
             <a class="btn btn-success" href="{{url_for('download.download_video')}}">Скачать видео</a>
         </div>

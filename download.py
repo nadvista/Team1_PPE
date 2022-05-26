@@ -19,4 +19,7 @@ def download_db():
 
 @download_bp.route('/download/')
 def download_page():
+    ###########################################################################
+    # # Gstreamer here :))))))))
+    ###########################################################################
     return render_template('videoplayer.html', filename=f"{current_app.config['DOWNLOAD_FOLDER']}/tempfile.mp4")

@@ -3,6 +3,8 @@ import app_utils
 import Yolov5_DeepSort_Pytorch.track
 import shutil
 import os
+from moviepy.editor import *
+
 turbo = None
 loading_bp = Blueprint('loading', __name__,
                         template_folder='templates')
@@ -36,8 +38,11 @@ def loading(file):
             shutil.rmtree(delete_folder + g)
     except:
         print("Failed Delete")
-    ###########################################################################
-    # # Gstreamer here :))))))))
-    ###########################################################################
+
+    
+    file_path = "./downloads/tempfile.mp4"
+    clip = VideoFileClip(file_path)
+    clip.write_videofile(file_path, fps=30)
+    clip.reader.close()
 
     return redirect(url_for('download.download_page'))
