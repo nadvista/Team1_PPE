@@ -1,40 +1,7 @@
-<!DOCTYPE html>
-<html>
+{% extends "page.html" %}
 
-    <head>
-        <title>Team1</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="\static\css\index_style.css">
-        <!-- <script type="text/javascript" src="index_script.js"></script> -->
-    </head>
+{% block content %}
 
-    <body>
-        
-        <div id="header">
-            Team 1 Personal Protection Equipment (PPE)
-        </div>
-
-        <div id="info">
-            <p>На сайте представлена нейронная сеть,<br>определяющая наличие средств защиты<br>
-            на человеке.<br>Для того, чтобы ею воспользоваться,<br>загрузите на сайт видео, и в течении<br>
-            нескольких минут вы получите видеозапись<br>с результатом работы.</p>
-        </div>
-
-        <div id="created_by">
-            <p>
-                <h4>Над созданием работали:</h4>
-                <ul>
-                    <li>Федор Маширин</li>
-                    <li>Егор Кирносов</li>
-                    <li>Данила Кириллов</li>
-                    <li>Сегрей Муллин</li>
-                    <li>Александр Смирнов</li>
-                </ul>
-            </p>
-        </div>
-        <!-- {% if loading %}
-        <div class="loader"></div>
-        {% else %} -->
         <form method="post" enctype="multipart/form-data">
             <div class="input__wrapper"> <!--Кнопка с выбором файла-->
                 <input type="file" accept=".mp4" name="file" id="input__file" class="input input__file"> 
@@ -48,7 +15,6 @@
                 <button type="submit" class="input__file-button-text" id="submit_button">Продолжить</button>
             </div>
         </form>
-        <!-- {% endif %} -->
         
         <!--Скрипт работает с кнопкой загрузки-->
         <script> 
@@ -69,7 +35,4 @@
               });
             });
         </script>
-
-    </body>
-
-</html>
+{% endblock %}

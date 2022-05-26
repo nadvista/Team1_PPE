@@ -15,6 +15,7 @@ click-repl==0.2.0
 colorama==0.4.4
 cycler==0.11.0
 Cython==0.29.28
+decorator==4.4.2
 Deprecated==1.2.13
 docopt==0.6.2
 easydict==1.9
@@ -32,6 +33,7 @@ h11==0.13.0
 h5py==3.6.0
 idna==3.3
 imageio==2.16.1
+imageio-ffmpeg==0.4.7
 importlib-metadata==4.11.3
 isort==4.3.21
 itsdangerous==2.1.2
@@ -42,14 +44,17 @@ Markdown==3.3.6
 MarkupSafe==2.1.1
 matplotlib==3.5.1
 mccabe==0.6.1
+moviepy==1.0.3
 numpy==1.22.3
 oauthlib==3.2.0
 opencv-python==4.5.5.64
 packaging==21.3
 pandas==1.4.1
 Pillow==9.0.1
+proglog==0.1.10
 prompt-toolkit==3.0.29
 protobuf==3.19.4
+psycopg2-binary==2.9.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.8.0
@@ -64,6 +69,8 @@ redis==4.3.0
 requests==2.27.1
 requests-oauthlib==1.3.1
 rsa==4.8
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
 scipy==1.8.0
 seaborn==0.11.2
 simple-websocket==0.5.2
@@ -78,8 +85,10 @@ torchvision==0.12.0
 tornado==6.1
 tqdm==4.63.1
 Turbo-Flask==0.8.0
-typing_extensions==4.1.1
+typing-extensions==4.1.1
 urllib3==1.26.9
+vext==0.7.6
+vext.gi==0.7.4
 vine==5.0.0
 wcwidth==0.2.5
 Werkzeug==2.0.3
@@ -88,4 +97,3 @@ wsproto==1.1.0
 yacs==0.1.8
 yapf==0.32.0
 zipp==3.7.0
-psycopg2-binary==2.9.3
