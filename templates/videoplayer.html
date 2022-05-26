@@ -24,20 +24,26 @@
             </p>
         </div>
 
-        <video id="my-video" class="video-js" controls preload="auto" width="640" data-setup="{}">
-            <source src="./video_streaming/output_manifest.mpd" type="application/dash+xml" />
-            <p class="vjs-no-js">NO SIGNAL</p>
-        </video>
-        
-        <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.4/dist/videojs-hls-quality-selector.min.js"></script>
-        <script>
-            const player = videojs('my-video');
-            player.hlsQualitySelector();
-        </script>
+        <div id="video">
+            <video
+                id="video"
+                class="video-js"
+                controls
+                preload="auto"
+                width="640"
+                height="264"
+                data-setup="{}">
+                <source src="/static/tempfile.mp4" type="video/mp4" />
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a>
+                </p>
+            </video>            
+        </div> 
+        <script src="https://vjs.zencdn.net/7.19.2/video.min.js"></script>
 
-        
         <div id="download"> <!--Кнопка скачивания-->
             <input id="download_button" type="button" name="download_button">
             <label for="download_button">

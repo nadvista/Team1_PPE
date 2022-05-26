@@ -10,8 +10,7 @@ from turbo_flask import Turbo
 from threading import Thread
 import time
 import database
-
-
+from moviepy.editor import *
 
 app = Flask(__name__)
 turbo = Turbo(app)
@@ -66,6 +65,7 @@ def loading():
         turbo.push(turbo.replace(render_template('loading.html'), 'content'))
 
     data = start(filepath)
+
     # data = db._process_data(data)
     # print(data)
     # print(round(time.time()))
@@ -113,27 +113,18 @@ def download():
         print("[O-ops!] Failed delete.")
 
     ###########################################################################
+    # Изменение частоты кадров tempfile.mp4
+    file_path = "./static/tempfile.mp4"
+    file = VideoFileClip(file_path)
+    file.write_videofile(file_path, fps=30)
+    file.reader.close()
+
+    ###########################################################################
     # FFmpeg here  
-
-    DATA_FOLDER = './video_streaming'
-    PATH_TO_INPUT_FILE = './static'
-
-    command = (
-    f'ffmpeg -re -i {PATH_TO_INPUT_FILE}/tempfile.mp4 -map 0 -map 0 -c:a \
-        aac -c:v libx264 -b:v:0 800k -b:v:1 \
-        300k -s:v:1 320x170 -profile:v:1 baseline \
-        -profile:v:0 main -bf 1 -keyint_min 120 -g 120 \
-        -sc_threshold 0 -b_strategy 0 -ar:a:1 22050 \
-        -use_timeline 1 -use_template 1 -window_size 5 \
-        -adaptation_sets "id=0,streams=v id=1,streams=a" \
-        -f dash {DATA_FOLDER}/output_manifest.mpd'
-    )
-
-    os.system(command)
 
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')
 
 
 if __name__ == "__main__":
-    app.run(debug=True,  port=5000)
+    app.run(debug=True,  port=8000)
