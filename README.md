@@ -12,3 +12,5 @@
     5. Выполнить гайд по установке PostgreSQL
     
     6. flask run
+    
+    Презентация проекта так же доступна по ссылке https://1drv.ms/p/s!AohWF3fg2eXH3iTAMAIMOS9ff90k?e=LmQj35
