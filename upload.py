@@ -13,7 +13,8 @@ def upload_file_POST():
     file = request.files['file']
     if file.filename == '':
         return redirect(request.url)
-    filename = secure_filename(file.filename)
+    # filename = secure_filename(file.filename)
+    filename = "tempfile.mp4"
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/{filename}"
     file.save(filepath)
     ###########################################################################
