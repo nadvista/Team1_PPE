@@ -90,14 +90,16 @@ def download():
         print("[O-ops!] Failed to delete source file.")
 
     ###########################################################################
-    # Переносим размеченный файл в /static
+    # Сохраняем размеченный файл с изменённой частотой кадров в /static
     try:
         file_source = './Yolov5_DeepSort_Pytorch/runs/track/weights/best_osnet_ibn_x1_0_MSMT17/'
         file_destination = './static/'
-        get_files = os.listdir(file_source)    
-        for g in get_files:
-            shutil.move(file_source + g, file_destination)
-            print(f'[INFO] {g} from "{file_source}" transfered by "{file_destination}" and ready for using!')
+
+        file = VideoFileClip(file_source + 'tempfile.mp4')
+        file.write_videofile(file_destination + 'tempfile.mp4', fps=30)
+        file.reader.close()
+
+        print(f'[INFO] "tempfile.mp4" from "{file_source}" transfered by "{file_destination}" and ready for using!')
     except:
         print("[O-ops!] Output file already exists.")
 
@@ -111,16 +113,6 @@ def download():
             shutil.rmtree(delete_folder + n)
     except:
         print("[O-ops!] Failed delete.")
-
-    ###########################################################################
-    # Изменение частоты кадров tempfile.mp4
-    file_path = "./static/tempfile.mp4"
-    file = VideoFileClip(file_path)
-    file.write_videofile(file_path, fps=30)
-    file.reader.close()
-
-    ###########################################################################
-    # FFmpeg here  
 
     ###########################################################################
     return render_template('videoplayer.html', filename='static/tempfile.mp4')
