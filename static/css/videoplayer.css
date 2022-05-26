@@ -53,6 +53,17 @@ body{
     font-family: Comic Sans MS, Comic Sans, cursive;
 }
 
+.video-js{
+    width: 100%;
+    max-width: 60%;
+    height:100%;
+    max-height: 650px;
+    display: flex;
+    justify-content: center;
+    margin: auto auto;
+    background: black;
+}
+
 .player-video{
     width: 100%;
     max-width: 60%;
