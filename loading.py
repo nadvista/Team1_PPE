@@ -20,25 +20,25 @@ def loading(file):
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/tempfile.mp4"
 
     ###########################################################################
-    # И удаляем файл ( Не работает пока )
+    # И удаляем файл
     try:
         delete_folder = 'static/'
-        os.unlink(delete_folder, "tempfile.mp4")
+        os.unlink(f"{delete_folder}tempfile.mp4")
     except:
         print("Failed Delete tempfile.mp4")
-    print("ОТдыхаемм.......")
-    sleep(10)
     ###########################################################################
-    # Переносим размеченный файл
+    # Сохраняем размеченный файл с изменённой частотой кадров в /static
     try:
-        file_source = 'Yolov5_DeepSort_Pytorch/runs/track/weights/best_osnet_ibn_x1_0_MSMT17/'
-        file_destination = current_app.config['DOWNLOAD_FOLDER']
-        get_files = os.listdir(file_source)
-        for g in get_files:
-            shutil.move(file_source + g, file_destination)
-            print(g, "Transfered by", file_destination, "And ready for using")
+        file_source = './Yolov5_DeepSort_Pytorch/runs/track/weights/best_osnet_ibn_x1_0_MSMT17/'
+        file_destination = './static/'
+
+        file = VideoFileClip(file_source + 'tempfile.mp4')
+        file.write_videofile(file_destination + 'tempfile.mp4', fps=30)
+        file.reader.close()
+
+        print(f'[INFO] "tempfile.mp4" from "{file_source}" transfered by "{file_destination}" and ready for using!')
     except:
-        print("File already exists")
+        print("[O-ops!] Output file already exists.")
     ###########################################################################
     # И удаляем папку откуда взяли файл
     try:
@@ -49,14 +49,4 @@ def loading(file):
             shutil.rmtree(delete_folder + g)
     except:
         print("Failed Delete")
-
-    ###########################################################################
-    # Изменяем количесвто fps на 30
-    # С помощью библиотеки moviepy
-    file_path = "./static/tempfile.mp4"
-    clip = VideoFileClip(file_path)
-    clip.write_videofile(file_path, fps=30)
-    clip.reader.close()
-    ###########################################################################
-
     return redirect(url_for('download.download_page'))
