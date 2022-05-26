@@ -1,0 +1,46 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Team1</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="\static\css\index_style.css">
+        <link rel="stylesheet" href="\static\css\loading.css">
+        <link rel="stylesheet" href="\static\css\videoplayer.css">
+        <link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet" />
+        {{ turbo() }}
+    </head>
+    <body>
+        <div id="content" class=content>
+            <div id="header">
+                Team 1 Personal Protection Equipment (PPE)
+            </div>
+
+            <div id="video">
+                <video
+                    id="video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    width="640"
+                    height="264"
+                    data-setup="{}">
+                    <source src="/static/tempfile.mp4" type="video/mp4" />
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank"
+                            >supports HTML5 video</a>
+                    </p>
+                </video>            
+            </div> 
+
+            <div id="submit">
+                <a class="btn btn-success" href="{{url_for('download.download_video')}}">Скачать видео</a>
+            </div>
+            
+            <div id="submit">
+                <a class="btn btn-success" href="{{url_for('download.download_db')}}">Скачать статистику</a>
+            </div>
+        </div>
+    </body>
+</html>
