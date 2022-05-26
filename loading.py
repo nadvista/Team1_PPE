@@ -1,8 +1,11 @@
+from time import sleep
 from flask import Blueprint, redirect, url_for,current_app
 import app_utils
 import Yolov5_DeepSort_Pytorch.track
 import shutil
 import os
+from moviepy.editor import *
+
 turbo = None
 loading_bp = Blueprint('loading', __name__,
                         template_folder='templates')
@@ -15,6 +18,16 @@ def loading(file):
     Yolov5_DeepSort_Pytorch.track.start(filepath)
 
     filepath = f"{current_app.config['UPLOAD_FOLDER']}/tempfile.mp4"
+
+    ###########################################################################
+    # И удаляем файл ( Не работает пока )
+    try:
+        delete_folder = 'static/'
+        os.unlink(delete_folder, "tempfile.mp4")
+    except:
+        print("Failed Delete tempfile.mp4")
+    print("ОТдыхаемм.......")
+    sleep(10)
     ###########################################################################
     # Переносим размеченный файл
     try:
@@ -36,8 +49,14 @@ def loading(file):
             shutil.rmtree(delete_folder + g)
     except:
         print("Failed Delete")
+
     ###########################################################################
-    # # Gstreamer here :))))))))
+    # Изменяем количесвто fps на 30
+    # С помощью библиотеки moviepy
+    file_path = "./static/tempfile.mp4"
+    clip = VideoFileClip(file_path)
+    clip.write_videofile(file_path, fps=30)
+    clip.reader.close()
     ###########################################################################
 
     return redirect(url_for('download.download_page'))
