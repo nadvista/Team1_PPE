@@ -1,4 +1,5 @@
 import os
+import random
 import shutil
 from flask import Flask, request, redirect, url_for, render_template, Response
 from werkzeug.utils import secure_filename
@@ -21,7 +22,8 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-conn_data = (5432, 'localhost', 'ppe_db', 'SyW8ZzaNJiKMx2y', 'postgres')
+#инициализация бд
+conn_data = (5432, 'localhost', 'ppe_db', '1234', 'postgres')
 db = database.Database(conn_data)
 
 
@@ -86,11 +88,12 @@ def loading(file):
 @app.route('/download/<file>', methods=['GET', 'POST'])
 def download(file):
     filepath = f"{app.config['UPLOAD_FOLDER']}/{file}"
+    #работа с бд
     data = start(filepath)
     data = db._process_data(data)
-    print(data)
     print(round(time.time()))
     db.push(data, str(round(time.time())))
+    #конец работы с бд
     ###########################################################################
     # Переносим размеченный файл 
     try:
@@ -140,4 +143,10 @@ def download(file):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+   if __name__ == '__main__':
+
+    port = 5000 + random.randint(0, 999)
+    print(port)
+    url = "http://127.0.0.1:{0}".format(port)
+    print(url)
+    app.run(use_reloader=False, debug=True, port=port)

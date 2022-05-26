@@ -1,9 +1,10 @@
 import psycopg2
-from typing import Dict, List
+from typing import List
 
 class Database:
     DB_SCHEMA = 'public'
     DB_TABLE = 'main'
+    DB_TXT_FILE = 'data.txt'
     def __init__(self, conn_data):
         port = str(conn_data[0])
         host = conn_data[1]
@@ -15,6 +16,7 @@ class Database:
         self.cursor = self.conn.cursor()
     
     def push(self, data: List, vid_id: str) -> None:
+        '''Этот метод пушит данные в бд'''
         query = 'INSERT INTO ' + Database.DB_SCHEMA + '.' + Database.DB_TABLE
         query += ' VALUES '
         query += '(' + vid_id + ', ' + '\'{'
@@ -36,8 +38,15 @@ class Database:
         query += '}\')'
         self.cursor.execute(query)
         self.conn.commit()
+        with open(Database.DB_TXT_FILE, 'a') as db:
+            db.write(vid_id + ':' +  data.__repr__() + '\n')
+
 
     def _process_data(self, data: List) -> List:
+        '''Обработка данных. Изyачально данные поступают в виде массива кортежей (время, id, тип)
+           Результат обработки - массив вида: [(время появления, время исчезновения, id, тип объекта)]
+        '''
+        #отслеживание появления объекта по id
         appeared = []
         processed = []
         for rec in data:
@@ -50,6 +59,7 @@ class Database:
             if rec[0] not in appeared_time:
                 appeared_time.append(rec[0])
         
+        #приведение данных к новому виду - [(фрейм, [id, тип])]
         for time in appeared_time:
             temp = []
             for rec in data:
@@ -58,6 +68,8 @@ class Database:
             sorted_data.append((time,temp))
         
         sorted_data.append((1.01, [0]))
+
+        #отслеживание исчезновений
         disappears = []
         for i in range(1,len(sorted_data)):
             temp1 = []
@@ -73,6 +85,7 @@ class Database:
         processed = sorted(processed, key = lambda rec: rec[1])
         disappears = sorted(disappears, key = lambda rec: rec[1])
 
+        #слияние списков
         merged = []
         for i in range(len(disappears)):
             merged.append((processed[i][0], disappears[i][0], processed[i][1], processed[i][2]))
