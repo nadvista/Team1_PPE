@@ -5,7 +5,7 @@ from typing import List
 class Database:
     DB_SCHEMA = 'public'
     DB_TABLE = 'main'
-    DB_TXT_FILE = os.path.join(os.curdir + 'static' + 'data.txt')
+    DB_TXT_FILE = os.path.join(os.curdir + '/static/data.txt')
     def __init__(self, conn_data):
         port = str(conn_data[0])
         host = conn_data[1]
@@ -47,7 +47,6 @@ class Database:
         '''Обработка данных. Изyачально данные поступают в виде массива кортежей (время, id, тип)
            Результат обработки - массив вида: [(время появления, время исчезновения, id, тип объекта)]
         '''
-        print(data)
         #отслеживание появления объекта по id
         appeared = []
         processed = []

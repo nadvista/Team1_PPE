@@ -97,3 +97,4 @@ wsproto==1.1.0
 yacs==0.1.8
 yapf==0.32.0
 zipp==3.7.0
+psycopg2-binary==2.9.3

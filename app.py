@@ -9,7 +9,6 @@ app = Flask(__name__)
 turbo_app = Turbo(app)
 loading.turbo = turbo_app
 
-
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads/'
 DOWNLOAD_FOLDER = 'static/'
